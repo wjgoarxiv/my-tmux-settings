@@ -1,6 +1,7 @@
 /**
- * gen-config.js — Generates ~/.tmux.conf with Dracula theme
- * Requires Node.js. Works on macOS, Linux, and Windows (psmux).
+ * gen-config.js — Generates ~/.tmux.conf with Catppuccin Mocha theme
+ * No TPM, no bash required. Works on macOS, Linux, Windows (psmux).
+ * Requires Node.js.
  *
  * Usage:
  *   node gen-config.js              → writes to ~/.tmux.conf
@@ -10,56 +11,65 @@
 const L = '\uE0B6';  // ( rounded left cap  [Nerd Font U+E0B6]
 const R = '\uE0B4';  // ) rounded right cap [Nerd Font U+E0B4]
 
-// ── Dracula color palette ──────────────────────────────────────────
-const bg      = '#282a36';
-const gray    = '#44475a';
-const purple  = '#bd93f9';
-const green   = '#50fa7b';
-const cyan    = '#8be9fd';
-const orange  = '#ffb86c';
-const fg      = '#f8f8f2';
-const comment = '#6272a4';
+// ── Catppuccin Mocha palette ───────────────────────────────────────
+// https://github.com/catppuccin/catppuccin#-palette
+const base    = '#1e1e2e';
+const mantle  = '#181825';
+const surface0= '#313244';
+const surface1= '#45475a';
+const text    = '#cdd6f4';
+const subtext1= '#bac2de';
+const mauve   = '#cba6f7';
+const green   = '#a6e3a1';
+const blue    = '#89b4fa';
+const sapphire= '#74c7ec';
+const teal    = '#94e2d5';
+const peach   = '#fab387';
+const pink    = '#f5c2e7';
+const sky     = '#89dceb';
 
 // ── Helper: build a rounded pill segment ──────────────────────────
 const pill = (pillBg, textFg, content) =>
-  `#[fg=${pillBg},bg=${bg}]${L}#[fg=${textFg},bg=${pillBg}]${content}#[fg=${pillBg},bg=${bg}]${R}`;
+  `#[fg=${pillBg},bg=${base}]${L}#[fg=${textFg},bg=${pillBg}]${content}#[fg=${pillBg},bg=${base}]${R}`;
 
-// ── Status bar layout ─────────────────────────────────────────────
-const statusLeft  = pill(green,   bg,  '  #S ') + ' ';
-const winInactive = pill(gray,    fg,  ' #W ');
-const winActive   = pill(purple,  bg,  ' #W ');
+// ── Status bar layout (matches catppuccin official screenshot) ────
+const statusLeft  = ' ';  // window tabs handle this
+const winInactive = pill(surface0, subtext1, ' #I  #W ');
+const winActive   = pill(mauve,    base,     ' #I  #W ');
 const statusRight =
-  pill(comment, fg, '  #{b:pane_current_path} ') +
+  pill(teal,   base, '  #{b:pane_current_path} ') +
   '  ' +
-  pill(orange,  bg, '  #(whoami) ') +
+  pill(sky,    base, '  #{pane_current_command} ') +
   '  ' +
-  pill(cyan,    bg, '  #H ');
+  pill(green,  base, '  #S ') +
+  '  ' +
+  pill(peach,  base, '  %H:%M  %d-%b-%y ');
 
 // ── Config template ───────────────────────────────────────────────
 const conf = `# ================================================================
-# my-tmux-settings — Dracula theme
+# my-tmux-settings — Catppuccin Mocha theme
 # Compatible: macOS (tmux) + Windows (psmux/PowerShell)
-# Font required: JetBrainsMono Nerd Font  https://www.nerdfonts.com
+# Font: JetBrainsMono Nerd Font  https://www.nerdfonts.com
 # Repo: https://github.com/wjgoarxiv/my-tmux-settings
 # ================================================================
 
-# Prefix key (C-b is tmux default — same on Mac and Windows)
+# Prefix key
 set -g prefix C-b
 bind C-b send-prefix
 
 # Pane borders
-set -g pane-border-style "fg=${gray}"
-set -g pane-active-border-style "fg=${purple}"
+set -g pane-border-style "fg=${surface1}"
+set -g pane-active-border-style "fg=${mauve}"
 
 # Message bar
-set -g message-style "bg=${gray},fg=${fg}"
-set -g message-command-style "bg=${gray},fg=${fg}"
+set -g message-style "bg=${surface0},fg=${text}"
+set -g message-command-style "bg=${surface0},fg=${text}"
 
 # ── Status bar (TOP) ──────────────────────────────────────────────
 set -g status on
 set -g status-interval 5
-set -g status-position top
-set -g status-style "bg=${bg},fg=${fg}"
+set -g status-position bottom
+set -g status-style "bg=${base},fg=${text}"
 set -g status-left-length 40
 set -g status-right-length 160
 
@@ -83,14 +93,9 @@ set -g history-limit 10000
 set -s escape-time 0
 
 # ── Key bindings ──────────────────────────────────────────────────
-# Reload config
 bind r source-file ~/.tmux.conf \\; display "  Config reloaded!"
-
-# Intuitive split keys
 bind | split-window -h -c "#{pane_current_path}"
 bind - split-window -v -c "#{pane_current_path}"
-
-# Vim-style pane navigation
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
@@ -107,6 +112,5 @@ if (preview) {
   const path = require('path');
   const dest = path.join(os.homedir(), '.tmux.conf');
   fs.writeFileSync(dest, conf, 'utf8');
-  console.log(`✓ Written to ${dest}`);
-  console.log('  Reload: tmux source ~/.tmux.conf   (or restart tmux)');
+  console.log(`Written to ${dest}`);
 }

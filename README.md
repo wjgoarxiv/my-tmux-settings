@@ -1,33 +1,35 @@
 # my-tmux-settings
 
-Dracula-themed tmux configuration — works on **macOS** (tmux) and **Windows** (psmux + PowerShell).
+Catppuccin Mocha-themed tmux configuration.
+Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific installers.
 
-**Status bar layout (top):**
-```
-  session    win1    win2          current-folder    user    hostname
-```
+---
+
+## Platform Support
+
+| Platform | Method | Plugin |
+|---|---|---|
+| **Windows (psmux)** | Node.js generates hardcoded config | No bash/TPM needed |
+| **macOS / WSL2 / Linux** | Official catppuccin/tmux bash plugin | Full module support |
 
 ---
 
 ## Requirements
 
-| | macOS | Windows |
-|---|---|---|
-| tmux | `brew install tmux` | `winget install psmux` |
-| Node.js | `brew install node` | `winget install OpenJS.NodeJS` |
-| Font | `brew install --cask font-jetbrains-mono-nerd-font` | `choco install -y nerd-fonts-JetBrainsMono` |
+### Windows (psmux)
+- [psmux](https://github.com/nicowillis/psmux)
+- [Node.js](https://nodejs.org)
+- [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `choco install -y nerd-fonts-JetBrainsMono`
+- Set font in Windows Terminal: `Settings → Profiles → Appearance → Font face`
 
-Set your terminal font to **JetBrainsMono Nerd Font** after installing.
+### macOS / WSL2 / Linux
+- tmux (`brew install tmux` / `apt install tmux`)
+- git
+- [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `brew install --cask font-jetbrains-mono-nerd-font`
 
 ---
 
 ## Quick Install
-
-### macOS / Linux
-```bash
-git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
-bash ~/my-tmux-settings/install.sh
-```
 
 ### Windows (PowerShell)
 ```powershell
@@ -35,8 +37,11 @@ git clone https://github.com/wjgoarxiv/my-tmux-settings $HOME/my-tmux-settings
 node $HOME/my-tmux-settings/customize/gen-config.js
 ```
 
-Then set **JetBrainsMono Nerd Font** in Windows Terminal:
-`Settings → Profiles → Appearance → Font face`
+### macOS / WSL2 / Linux
+```bash
+git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
+bash ~/my-tmux-settings/install.sh
+```
 
 ---
 
@@ -44,110 +49,75 @@ Then set **JetBrainsMono Nerd Font** in Windows Terminal:
 
 | Key | Action |
 |---|---|
-| `Ctrl+b` | Prefix key |
-| `Ctrl+b \|` | Split pane left/right |
-| `Ctrl+b -` | Split pane top/bottom |
-| `Ctrl+b h/j/k/l` | Navigate panes (vim-style) |
-| `Ctrl+b r` | Reload config instantly |
-| `Ctrl+b z` | Zoom pane (fullscreen toggle) |
+| `Ctrl+b` | Prefix |
+| `Ctrl+b \|` | Split left/right |
+| `Ctrl+b -` | Split top/bottom |
+| `Ctrl+b h/j/k/l` | Vim-style pane navigation |
+| `Ctrl+b r` | Reload config |
+| `Ctrl+b z` | Zoom pane |
 | `Ctrl+b d` | Detach session |
-| `Ctrl+b [` | Scroll mode (q to exit) |
 
 ---
 
-## Customize Colors
+## Customize Colors (Windows)
 
-Edit `customize/gen-config.js` and change the color variables, then re-run:
-
-```bash
-# macOS/Linux
-node customize/gen-config.js && tmux source ~/.tmux.conf
-
-# Windows (PowerShell)
-node customize\gen-config.js
-# then in psmux: Ctrl+b → r
+Edit `customize/gen-config.js` — change hex values at the top, then:
+```powershell
+node customize/gen-config.js
+# in psmux: Ctrl+b → r
 ```
-
-Dracula palette:
-
-| Name | Hex | Used for |
-|---|---|---|
-| Background | `#282a36` | Status bar base |
-| Purple | `#bd93f9` | Active window tab |
-| Green | `#50fa7b` | Session name |
-| Cyan | `#8be9fd` | Hostname |
-| Orange | `#ffb86c` | Username |
-| Comment | `#6272a4` | Time / date |
 
 ---
 
 ## 🤖 LLM Agent Installation Prompt
 
-Paste the block below into **Claude**, **ChatGPT**, or any AI assistant to auto-install in one shot:
-
----
+Paste into Claude / ChatGPT for one-shot auto-install:
 
 ```
-I want to install the tmux Dracula configuration from https://github.com/wjgoarxiv/my-tmux-settings on my machine.
+I want to install the tmux Catppuccin Mocha config from https://github.com/wjgoarxiv/my-tmux-settings.
 
 My environment:
-- OS: [macOS / Windows]
-- Shell: [zsh/bash / PowerShell]
-- Terminal: [iTerm2 / Windows Terminal / other]
+- OS: [Windows / macOS / WSL2 / Linux]
+- Shell: [PowerShell / bash / zsh]
+- Terminal: [Windows Terminal / iTerm2 / other]
 - Node.js: [yes/no — check: node --version]
 - Git: [yes/no — check: git --version]
 
-Please execute the following steps one by one, showing me the commands to run and verifying each step:
+Steps:
 
-STEP 1 — Check prerequisites
-  Run: node --version && git --version
-  If either is missing, tell me how to install it for my OS before continuing.
+STEP 1 — Verify prerequisites
+  Windows: node --version && git --version
+  macOS/Linux: git --version && tmux -V
 
 STEP 2 — Clone the repo
-  macOS/Linux:  git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
   Windows:      git clone https://github.com/wjgoarxiv/my-tmux-settings $HOME/my-tmux-settings
+  macOS/Linux:  git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 
-STEP 3 — Generate ~/.tmux.conf
-  macOS/Linux:  bash ~/my-tmux-settings/install.sh
+STEP 3 — Install
   Windows:      node $HOME/my-tmux-settings/customize/gen-config.js
+  macOS/Linux:  bash ~/my-tmux-settings/install.sh
 
-STEP 4 — Verify the config was created
-  macOS/Linux:  head -5 ~/.tmux.conf
-  Windows:      Get-Content $HOME/.tmux.conf | Select-Object -First 5
-
-STEP 5 — Install JetBrainsMono Nerd Font
-  macOS:    brew install --cask font-jetbrains-mono-nerd-font
+STEP 4 — Install JetBrainsMono Nerd Font
   Windows:  choco install -y nerd-fonts-JetBrainsMono
-            (no choco? download from https://www.nerdfonts.com/font-downloads)
+  macOS:    brew install --cask font-jetbrains-mono-nerd-font
 
-STEP 6 — Set font in terminal
+STEP 5 — Set font in terminal
   Windows Terminal: Settings → Profiles → Appearance → Font face → "JetBrainsMono Nerd Font"
-  iTerm2:           Preferences → Profiles → Text → Font → "JetBrainsMono Nerd Font Mono"
+  iTerm2: Preferences → Profiles → Text → Font → "JetBrainsMono Nerd Font Mono"
 
-STEP 7 — Start or reload tmux
-  New session:  tmux
-  Reload:       tmux source ~/.tmux.conf   OR inside tmux: Ctrl+b → r
+STEP 6 — Start tmux
+  Windows: psmux
+  macOS/Linux: tmux
 
-After all steps, confirm: is the Dracula pill-shaped status bar visible at the top?
-If icons show as □□, the font is not applied — remind me to restart the terminal after font install.
+Confirm: is the Catppuccin Mocha status bar visible at the bottom?
 ```
 
 ---
 
 ## Troubleshooting
 
-**Icons show as □□ or ??**
-→ Font not set or terminal not restarted. Set **JetBrainsMono Nerd Font** and restart the terminal.
+**Icons show □□** → Font not applied. Restart terminal after font install.
 
-**Colors look wrong**
-```bash
-echo $TERM   # should be: screen-256color or xterm-256color
-```
+**Config not updating** → `Ctrl+b r` reloads config instantly.
 
-**Config not applying after edit**
-```
-Ctrl+b  →  r     # reloads ~/.tmux.conf instantly
-```
-
-**Windows: `Ctrl+b I` does nothing**
-→ This config does NOT use TPM. Run `gen-config.js` to install — no plugin manager needed.
+**Windows: plugin not loading** → This repo uses hardcoded colors on Windows (no bash needed). Run `node customize/gen-config.js` to regenerate.
