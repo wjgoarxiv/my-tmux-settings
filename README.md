@@ -1,24 +1,24 @@
 # my-tmux-settings
 
-Catppuccin Mocha-themed tmux configuration.
+Dracula-themed tmux configuration.
 Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific installers.
 
 ---
 
 ## Platform Support
 
-| Platform | Method | Plugin |
+| Platform | Method | Theme |
 |---|---|---|
-| **Windows (psmux)** | Node.js generates hardcoded config | No bash/TPM needed |
-| **macOS / WSL2 / Linux** | Official catppuccin/tmux bash plugin | Full module support |
+| **Windows (psmux)** | PPM plugin (recommended) or Node.js fallback | psmux-theme-dracula |
+| **macOS / WSL2 / Linux** | Hardcoded Dracula config | No plugin dependency |
 
 ---
 
 ## Requirements
 
 ### Windows (psmux)
-- [psmux](https://github.com/nicowillis/psmux)
-- [Node.js](https://nodejs.org)
+- [psmux](https://github.com/marlocarlo/psmux)
+- [Node.js](https://nodejs.org) (for fallback installer)
 - [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `choco install -y nerd-fonts-JetBrainsMono`
 - Set font in Windows Terminal: `Settings → Profiles → Appearance → Font face`
 
@@ -31,7 +31,20 @@ Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific
 
 ## Quick Install
 
-### Windows (PowerShell)
+### Windows — PPM Plugin (Recommended)
+```powershell
+# Install PPM (psmux plugin manager)
+git clone https://github.com/marlocarlo/psmux-plugins.git "$env:TEMP\psmux-plugins"
+Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse
+Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
+
+# Install Dracula theme via Prefix + I after adding to ~/.psmux.conf:
+#   set -g @plugin 'psmux-plugins/psmux-theme-dracula'
+```
+
+Or use **tmuxpanel** (`winget install marlocarlo.tmuxpanel`) to browse and install themes with a TUI.
+
+### Windows — Node.js Fallback
 ```powershell
 git clone https://github.com/wjgoarxiv/my-tmux-settings $HOME/my-tmux-settings
 node $HOME/my-tmux-settings/customize/gen-config.js
@@ -69,12 +82,12 @@ node customize/gen-config.js
 
 ---
 
-## 🤖 LLM Agent Installation Prompt
+## LLM Agent Installation Prompt
 
 Paste into Claude / ChatGPT for one-shot auto-install:
 
 ```
-I want to install the tmux Catppuccin Mocha config from https://github.com/wjgoarxiv/my-tmux-settings.
+I want to install the tmux Dracula config from https://github.com/wjgoarxiv/my-tmux-settings.
 
 My environment:
 - OS: [Windows / macOS / WSL2 / Linux]
@@ -94,7 +107,8 @@ STEP 2 — Clone the repo
   macOS/Linux:  git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 
 STEP 3 — Install
-  Windows:      node $HOME/my-tmux-settings/customize/gen-config.js
+  Windows (PPM): Install PPM plugin manager, then add psmux-theme-dracula plugin
+  Windows (fallback): node $HOME/my-tmux-settings/customize/gen-config.js
   macOS/Linux:  bash ~/my-tmux-settings/install.sh
 
 STEP 4 — Install JetBrainsMono Nerd Font
@@ -109,14 +123,14 @@ STEP 6 — Start tmux
   Windows: psmux
   macOS/Linux: tmux
 
-Confirm: is the Catppuccin Mocha status bar visible at the bottom?
+Confirm: is the Dracula status bar visible at the bottom?
 ```
 
 ---
 
 ## Troubleshooting
 
-**Icons show □□** → Font not applied. Restart terminal after font install.
+**Icons show boxes** → Font not applied. Restart terminal after font install.
 
 **Config not updating** → `Ctrl+b r` reloads config instantly.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # install.sh — Mac / WSL2 / Linux installer
-# Uses official catppuccin/tmux bash plugin
+# Installs Dracula-themed tmux config (hardcoded, no plugin dependency)
 set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -15,23 +15,11 @@ if ! command -v tmux &>/dev/null; then
 fi
 echo "✓ $(tmux -V)"
 
-# 2. Clone catppuccin/tmux plugin
-PLUGIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
-if [ -d "$PLUGIN_DIR" ]; then
-  echo "✓ catppuccin/tmux already exists — pulling latest"
-  git -C "$PLUGIN_DIR" pull --quiet
-else
-  echo "  Cloning catppuccin/tmux..."
-  mkdir -p "$HOME/.config/tmux/plugins/catppuccin"
-  git clone --depth=1 https://github.com/catppuccin/tmux "$PLUGIN_DIR"
-  echo "✓ catppuccin/tmux installed"
-fi
-
-# 3. Copy tmux-unix.conf → ~/.tmux.conf
+# 2. Copy tmux-unix.conf → ~/.tmux.conf
 cp "$DIR/tmux-unix.conf" "$HOME/.tmux.conf"
-echo "✓ ~/.tmux.conf installed (catppuccin bash plugin)"
+echo "✓ ~/.tmux.conf installed (Dracula theme)"
 
-# 4. Font reminder
+# 3. Font reminder
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set terminal font to: JetBrainsMono Nerd Font"

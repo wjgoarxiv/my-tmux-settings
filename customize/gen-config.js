@@ -1,5 +1,5 @@
 /**
- * gen-config.js — Generates ~/.tmux.conf with Catppuccin Mocha theme
+ * gen-config.js — Generates ~/.tmux.conf with Dracula theme
  * No TPM, no bash required. Works on macOS, Linux, Windows (psmux).
  * Requires Node.js.
  *
@@ -11,43 +11,39 @@
 const L = '\uE0B6';  // ( rounded left cap  [Nerd Font U+E0B6]
 const R = '\uE0B4';  // ) rounded right cap [Nerd Font U+E0B4]
 
-// ── Catppuccin Mocha palette ───────────────────────────────────────
-// https://github.com/catppuccin/catppuccin#-palette
-const base    = '#1e1e2e';
-const mantle  = '#181825';
-const surface0= '#313244';
-const surface1= '#45475a';
-const text    = '#cdd6f4';
-const subtext1= '#bac2de';
-const mauve   = '#cba6f7';
-const green   = '#a6e3a1';
-const blue    = '#89b4fa';
-const sapphire= '#74c7ec';
-const teal    = '#94e2d5';
-const peach   = '#fab387';
-const pink    = '#f5c2e7';
-const sky     = '#89dceb';
+// ── Dracula palette ──────────────────────────────────────────────
+// https://draculatheme.com/contribute#color-palette
+const bg      = '#282a36';
+const curLine = '#44475a';
+const fg      = '#f8f8f2';
+const comment = '#6272a4';
+const cyan    = '#8be9fd';
+const green   = '#50fa7b';
+const orange  = '#ffb86c';
+const pink    = '#ff79c6';
+const purple  = '#bd93f9';
+const red     = '#ff5555';
+const yellow  = '#f1fa8c';
 
 // ── Helper: build a rounded pill segment ──────────────────────────
 const pill = (pillBg, textFg, content) =>
-  `#[fg=${pillBg},bg=${base}]${L}#[fg=${textFg},bg=${pillBg}]${content}#[fg=${pillBg},bg=${base}]${R}`;
+  `#[fg=${pillBg},bg=${bg}]${L}#[fg=${textFg},bg=${pillBg}]${content}#[fg=${pillBg},bg=${bg}]${R}`;
 
-// ── Status bar layout (matches catppuccin official screenshot) ────
-const statusLeft  = ' ';  // window tabs handle this
-const winInactive = pill(surface0, subtext1, ' #I  #W ');
-const winActive   = pill(mauve,    base,     ' #I  #W ');
+// ── Status bar layout ────────────────────────────────────────────
+const statusLeft  = pill(green, bg, ' #S ') + ' ';
+const winInactive = `#[fg=${comment}] #I #W `;
+const winActive   = `${L}#[bg=${purple},fg=${fg},bold] #I #W #[fg=${purple},bg=${bg}]${R}`.replace(L, `#[fg=${purple},bg=${bg}]${L}`);
+const winSep      = `#[fg=${curLine}]|`;
 const statusRight =
-  pill(teal,   base, '  #{b:pane_current_path} ') +
-  '  ' +
-  pill(sky,    base, '  #{pane_current_command} ') +
-  '  ' +
-  pill(green,  base, '  #S ') +
-  '  ' +
-  pill(peach,  base, '  %H:%M  %d-%b-%y ');
+  pill(curLine, cyan, ' %H:%M ') +
+  ' ' +
+  pill(comment, orange, ' %a ') +
+  ' ' +
+  pill(purple,  fg,   ' %d-%b ');
 
 // ── Config template ───────────────────────────────────────────────
 const conf = `# ================================================================
-# my-tmux-settings — Catppuccin Mocha theme
+# my-tmux-settings — Dracula theme
 # Compatible: macOS (tmux) + Windows (psmux/PowerShell)
 # Font: JetBrainsMono Nerd Font  https://www.nerdfonts.com
 # Repo: https://github.com/wjgoarxiv/my-tmux-settings
@@ -58,27 +54,30 @@ set -g prefix C-b
 bind C-b send-prefix
 
 # Pane borders
-set -g pane-border-style "fg=${surface1}"
-set -g pane-active-border-style "fg=${mauve}"
+set -g pane-border-style "fg=${curLine}"
+set -g pane-active-border-style "fg=${purple}"
 
 # Message bar
-set -g message-style "bg=${surface0},fg=${text}"
-set -g message-command-style "bg=${surface0},fg=${text}"
+set -g message-style "bg=${curLine},fg=${fg}"
+set -g message-command-style "bg=${curLine},fg=${fg}"
+set -g mode-style "bg=${purple},fg=${fg}"
 
-# ── Status bar (TOP) ──────────────────────────────────────────────
+# ── Status bar ───────────────────────────────────────────────────
 set -g status on
 set -g status-interval 5
 set -g status-position bottom
-set -g status-style "bg=${base},fg=${text}"
-set -g status-left-length 40
-set -g status-right-length 160
+set -g status-justify left
+set -g status-style "bg=${bg},fg=${fg}"
+set -g status-left-length 50
+set -g status-right-length 80
 
 set -g status-left "${statusLeft}"
 set -g status-right "${statusRight}"
 
 set -g window-status-format "${winInactive}"
 set -g window-status-current-format "${winActive}"
-set -g window-status-separator " "
+set -g window-status-separator "${winSep}"
+set -g window-status-activity-style "fg=${orange},bg=${bg}"
 
 # ── Colors ────────────────────────────────────────────────────────
 set -g default-terminal "screen-256color"
