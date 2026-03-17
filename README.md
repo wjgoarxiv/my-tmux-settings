@@ -97,13 +97,13 @@ My environment:
 - OS: [Windows / macOS / WSL2 / Linux]
 - Shell: [PowerShell / bash / zsh]
 - Terminal: [Windows Terminal / iTerm2 / other]
-- Node.js: [yes/no — check: node --version]
+- Node.js: [yes/no — check: node --version] (Windows only)
 - Git: [yes/no — check: git --version]
 
 Steps:
 
 STEP 1 — Verify prerequisites
-  Windows: node --version && git --version
+  Windows:     node --version && git --version
   macOS/Linux: git --version && tmux -V
 
 STEP 2 — Clone the repo
@@ -111,27 +111,26 @@ STEP 2 — Clone the repo
   macOS/Linux:  git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 
 STEP 3 — Install
-  Windows:      node $HOME/my-tmux-settings/customize/gen-config.js
-  macOS/Linux:  bash ~/my-tmux-settings/install.sh
+  Windows (PowerShell): powershell -File $HOME/my-tmux-settings/install.ps1
+    — OR manually:      node $HOME/my-tmux-settings/customize/gen-config.js
+  macOS/Linux:          bash ~/my-tmux-settings/install.sh
+    — Automatically installs: catppuccin/tmux plugin, ~/.tmux.conf, sysinfo.sh
 
-STEP 4 — Install sysinfo script (CPU/MEM status bar widget)
-  mkdir -p ~/.tmux
-  cp ~/my-tmux-settings/scripts/sysinfo.sh ~/.tmux/sysinfo.sh
-  chmod +x ~/.tmux/sysinfo.sh
-
-STEP 5 — Install JetBrainsMono Nerd Font
+STEP 4 — Install JetBrainsMono Nerd Font
   Windows:  choco install -y nerd-fonts-JetBrainsMono
   macOS:    brew install --cask font-jetbrains-mono-nerd-font
+  Linux:    download from https://www.nerdfonts.com
 
-STEP 6 — Set font in terminal
+STEP 5 — Set font in terminal
   Windows Terminal: Settings → Profiles → Appearance → Font face → "JetBrainsMono Nerd Font"
-  iTerm2: Preferences → Profiles → Text → Font → "JetBrainsMono Nerd Font Mono"
+  iTerm2:           Preferences → Profiles → Text → Font → "JetBrainsMono Nerd Font Mono"
 
-STEP 7 — Start tmux
-  Windows: psmux
+STEP 6 — Start tmux
+  Windows:     psmux
   macOS/Linux: tmux
 
-Confirm: is the Catppuccin Mocha status bar visible at the bottom?
+Confirm: is the Catppuccin Mocha status bar visible at the bottom
+with rounded pill segments and a CPU/MEM widget on the right?
 ```
 
 ---
