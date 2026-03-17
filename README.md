@@ -1,6 +1,6 @@
 # my-tmux-settings
 
-Dracula-themed tmux configuration.
+Catppuccin Mocha-themed tmux configuration.
 Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific installers.
 
 ---
@@ -9,8 +9,8 @@ Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific
 
 | Platform | Method | Theme |
 |---|---|---|
-| **Windows (psmux)** | PPM plugin (recommended) or Node.js fallback | psmux-theme-dracula |
-| **macOS / WSL2 / Linux** | Hardcoded Dracula config | No plugin dependency |
+| **Windows (psmux)** | Node.js hardcoded config | Catppuccin Mocha |
+| **macOS / WSL2 / Linux** | catppuccin/tmux plugin | Catppuccin Mocha |
 
 ---
 
@@ -18,7 +18,7 @@ Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific
 
 ### Windows (psmux)
 - [psmux](https://github.com/marlocarlo/psmux)
-- [Node.js](https://nodejs.org) (for fallback installer)
+- [Node.js](https://nodejs.org) (for config generator)
 - [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `choco install -y nerd-fonts-JetBrainsMono`
 - Set font in Windows Terminal: `Settings → Profiles → Appearance → Font face`
 
@@ -31,20 +31,7 @@ Supports **Windows (psmux)** and **macOS / WSL2 / Linux** with platform-specific
 
 ## Quick Install
 
-### Windows — PPM Plugin (Recommended)
-```powershell
-# Install PPM (psmux plugin manager)
-git clone https://github.com/marlocarlo/psmux-plugins.git "$env:TEMP\psmux-plugins"
-Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse
-Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
-
-# Install Dracula theme via Prefix + I after adding to ~/.psmux.conf:
-#   set -g @plugin 'psmux-plugins/psmux-theme-dracula'
-```
-
-Or use **tmuxpanel** (`winget install marlocarlo.tmuxpanel`) to browse and install themes with a TUI.
-
-### Windows — Node.js Fallback
+### Windows
 ```powershell
 git clone https://github.com/wjgoarxiv/my-tmux-settings $HOME/my-tmux-settings
 node $HOME/my-tmux-settings/customize/gen-config.js
@@ -55,6 +42,11 @@ node $HOME/my-tmux-settings/customize/gen-config.js
 git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 bash ~/my-tmux-settings/install.sh
 ```
+
+The installer will:
+1. Install the [catppuccin/tmux](https://github.com/catppuccin/tmux) plugin
+2. Copy `tmux.conf` to `~/.tmux.conf`
+3. Install `sysinfo.sh` (CPU/MEM status bar widget)
 
 ---
 
@@ -74,11 +66,23 @@ bash ~/my-tmux-settings/install.sh
 
 ## Customize Colors (Windows)
 
-Edit `customize/gen-config.js` — change hex values at the top, then:
+Edit `customize/gen-config.js` — change the Catppuccin Mocha hex values at the top, then:
 ```powershell
 node customize/gen-config.js
 # in psmux: Ctrl+b → r
 ```
+
+---
+
+## Features
+
+- **Catppuccin Mocha** color scheme across status bar, panes, and messages
+- **Rounded pill** segments in status bar (Nerd Font glyphs)
+- **CPU/MEM** widget via `sysinfo.sh`
+- **DEC 2026 Synchronized Output** — eliminates flicker in Claude Code and other fast-output tools
+- **focus-events** enabled for better editor integration
+- **Mouse** support with tuned scroll speed
+- **allow-passthrough** for image/sixel protocols
 
 ---
 
@@ -87,7 +91,7 @@ node customize/gen-config.js
 Paste into Claude / ChatGPT for one-shot auto-install:
 
 ```
-I want to install the tmux Dracula config from https://github.com/wjgoarxiv/my-tmux-settings.
+I want to install the tmux Catppuccin Mocha config from https://github.com/wjgoarxiv/my-tmux-settings.
 
 My environment:
 - OS: [Windows / macOS / WSL2 / Linux]
@@ -107,8 +111,7 @@ STEP 2 — Clone the repo
   macOS/Linux:  git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 
 STEP 3 — Install
-  Windows (PPM): Install PPM plugin manager, then add psmux-theme-dracula plugin
-  Windows (fallback): node $HOME/my-tmux-settings/customize/gen-config.js
+  Windows:      node $HOME/my-tmux-settings/customize/gen-config.js
   macOS/Linux:  bash ~/my-tmux-settings/install.sh
 
 STEP 4 — Install sysinfo script (CPU/MEM status bar widget)
@@ -128,7 +131,7 @@ STEP 7 — Start tmux
   Windows: psmux
   macOS/Linux: tmux
 
-Confirm: is the Dracula status bar visible at the bottom?
+Confirm: is the Catppuccin Mocha status bar visible at the bottom?
 ```
 
 ---
@@ -140,3 +143,5 @@ Confirm: is the Dracula status bar visible at the bottom?
 **Config not updating** → `Ctrl+b r` reloads config instantly.
 
 **Windows: plugin not loading** → This repo uses hardcoded colors on Windows (no bash needed). Run `node customize/gen-config.js` to regenerate.
+
+**Claude Code flicker** → The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support.
