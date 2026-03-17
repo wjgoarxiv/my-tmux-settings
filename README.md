@@ -111,15 +111,20 @@ STEP 3 — Install
   Windows (fallback): node $HOME/my-tmux-settings/customize/gen-config.js
   macOS/Linux:  bash ~/my-tmux-settings/install.sh
 
-STEP 4 — Install JetBrainsMono Nerd Font
+STEP 4 — Install sysinfo script (CPU/MEM status bar widget)
+  mkdir -p ~/.tmux
+  cp ~/my-tmux-settings/scripts/sysinfo.sh ~/.tmux/sysinfo.sh
+  chmod +x ~/.tmux/sysinfo.sh
+
+STEP 5 — Install JetBrainsMono Nerd Font
   Windows:  choco install -y nerd-fonts-JetBrainsMono
   macOS:    brew install --cask font-jetbrains-mono-nerd-font
 
-STEP 5 — Set font in terminal
+STEP 6 — Set font in terminal
   Windows Terminal: Settings → Profiles → Appearance → Font face → "JetBrainsMono Nerd Font"
   iTerm2: Preferences → Profiles → Text → Font → "JetBrainsMono Nerd Font Mono"
 
-STEP 6 — Start tmux
+STEP 7 — Start tmux
   Windows: psmux
   macOS/Linux: tmux
 
