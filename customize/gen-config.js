@@ -114,10 +114,8 @@ set -g message-command-style "bg=${surface0},fg=${text}"
 set -g mode-style "bg=${mauve},fg=${text}"
 
 # ── Status bar ───────────────────────────────────────────────────
-set -g status on
 set -g status-interval 5
 set -g status-position bottom
-set -g status-justify left
 set -g status-style "bg=${mantle},fg=${text}"
 set -g status-left-length 100
 set -g status-right-length 100
