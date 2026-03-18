@@ -134,7 +134,7 @@ Running native tmux on Windows via MSYS2 + Git Bash requires several non-obvious
 | **conda "Could not determine home directory"** | Windows Python doesn't understand POSIX HOME path | Set `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH` in tmux.conf |
 | **tmux-256color terminfo missing** | MSYS2 doesn't ship tmux-256color | Use `screen-256color` instead |
 | **CRLF in plugin files** | Git clones with CRLF on Windows | Clone with `core.autocrlf=false` or sed fix |
-| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `claude`) | MSYS2 tmux doesn't inherit the Windows PATH | `set-environment -g MSYS2_PATH_TYPE "inherit"` in tmux.conf (handled by installer) |
+| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `claude`) | MSYS2 tmux doesn't inherit the Windows PATH | `MSYS2_PATH_TYPE=inherit` in tmux alias (handled by installer) |
 
 ---
 
@@ -249,4 +249,4 @@ with powerline triangle segments, Nerd Font icons, and a CPU/MEM widget?
 
 **Claude Code flicker** → The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support.
 
-**Windows: `command not found` for node/git/eza/claude inside tmux** → Re-run `node customize/gen-config.js --windows` to regenerate the config with `MSYS2_PATH_TYPE=inherit`, which makes MSYS2 inherit the full Windows PATH.
+**Windows: `command not found` for node/git/eza/claude inside tmux** → Ensure your tmux alias includes `MSYS2_PATH_TYPE=inherit`: `alias tmux='MSYS2_PATH_TYPE=inherit /c/msys64/usr/bin/tmux.exe -u'`. Re-run `install-windows.sh` to fix automatically.

@@ -81,7 +81,7 @@ chmod +x "$HOME/.tmux/sysinfo.sh"
 echo "✓ ~/.tmux/sysinfo.sh installed (CPU/MEM widget)"
 
 # ── 8. Add tmux alias to .zshrc ──────────────────────────────────
-ALIAS_LINE="alias tmux='/c/msys64/usr/bin/tmux.exe -u'"
+ALIAS_LINE="alias tmux='MSYS2_PATH_TYPE=inherit /c/msys64/usr/bin/tmux.exe -u'"
 if grep -qF "alias tmux=" "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ tmux alias already in .zshrc"
 else
@@ -91,19 +91,7 @@ else
   echo "✓ tmux alias added to .zshrc"
 fi
 
-# ── 9. Create .zprofile for MSYS2 PATH inheritance ─────────────
-# MSYS2 has no /etc/zprofile, so zsh never sources /etc/profile.
-# This .zprofile bridges that gap, letting MSYS2_PATH_TYPE=inherit
-# (set in tmux.conf) propagate the full Windows PATH to zsh.
-ZPROFILE="$HOME/.zprofile"
-if [ -f "$ZPROFILE" ] && grep -q '/etc/profile' "$ZPROFILE" 2>/dev/null; then
-  echo "✓ .zprofile already sources /etc/profile"
-else
-  printf "# Source MSYS2 system profile (PATH inheritance, MSYS2_PATH_TYPE)\n# Use sh emulation: /etc/profile is a bash script with globs that\n# fail under zsh's strict nomatch option.\nemulate sh -c 'source /etc/profile'\n" > "$ZPROFILE"
-  echo "✓ .zprofile created (MSYS2 PATH inheritance)"
-fi
-
-# ── 10. Enable Windows Terminal builtinGlyphs ────────────────────
+# ── 9. Enable Windows Terminal builtinGlyphs ─────────────────────
 WT_SETTINGS="$HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
 if [ -f "$WT_SETTINGS" ]; then
   if python -c "
@@ -127,7 +115,7 @@ else
   echo "⚠  Windows Terminal settings not found (skipping builtinGlyphs)"
 fi
 
-# ── 11. Font reminder ────────────────────────────────────────────
+# ── 10. Font reminder ────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set Windows Terminal font to: JetBrainsMono Nerd Font"
