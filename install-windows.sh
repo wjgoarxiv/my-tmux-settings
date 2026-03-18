@@ -82,8 +82,12 @@ echo "✓ ~/.tmux/sysinfo.sh installed (CPU/MEM widget)"
 
 # ── 8. Add tmux alias to .zshrc ──────────────────────────────────
 ALIAS_LINE="alias tmux='MSYS2_PATH_TYPE=inherit /c/msys64/usr/bin/tmux.exe -u'"
-if grep -qF "alias tmux=" "$HOME/.zshrc" 2>/dev/null; then
+if grep -qF 'MSYS2_PATH_TYPE=inherit' "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ tmux alias already in .zshrc"
+elif grep -qF "alias tmux=" "$HOME/.zshrc" 2>/dev/null; then
+  echo "Updating tmux alias with MSYS2_PATH_TYPE=inherit..."
+  sed -i "s|alias tmux=.*|$ALIAS_LINE|" "$HOME/.zshrc"
+  echo "✓ tmux alias updated in .zshrc"
 else
   echo "" >> "$HOME/.zshrc"
   echo "# Native MSYS2 tmux with UTF-8 mode" >> "$HOME/.zshrc"
@@ -98,18 +102,19 @@ PATH_LINE='export PATH="$HOME/.local/bin:$HOME/AppData/Roaming/npm:/c/Program Fi
 if grep -qF 'Program Files/nodejs' "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ Windows tool paths already in .zshrc"
 else
-  sed -i '/^# Environment/a\'"$PATH_LINE" "$HOME/.zshrc" 2>/dev/null || {
-    echo "" >> "$HOME/.zshrc"
-    echo "# Windows tool paths for MSYS2 tmux" >> "$HOME/.zshrc"
-    echo "$PATH_LINE" >> "$HOME/.zshrc"
-  }
+  echo "" >> "$HOME/.zshrc"
+  echo "# Windows tool paths for MSYS2 tmux" >> "$HOME/.zshrc"
+  echo "$PATH_LINE" >> "$HOME/.zshrc"
   echo "✓ Windows tool paths added to .zshrc"
 fi
 
 # ── 10. Enable Windows Terminal builtinGlyphs ────────────────────
 WT_SETTINGS="$HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
 if [ -f "$WT_SETTINGS" ]; then
-  if python -c "
+  PYTHON=$(command -v python3 2>/dev/null || command -v python 2>/dev/null || echo "")
+  if [ -z "$PYTHON" ]; then
+    echo "⚠  Python not found (skipping builtinGlyphs — enable manually in Windows Terminal settings)"
+  elif "$PYTHON" -c "
 import json, sys
 with open(sys.argv[1], 'r', encoding='utf-8') as f:
     d = json.load(f)

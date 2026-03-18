@@ -72,8 +72,9 @@ powershell -File $HOME/my-tmux-settings/install.ps1
 2. Fixes MSYS2 HOME to use Windows home directory
 3. Generates hardcoded Catppuccin Mocha `~/.tmux.conf` via Node.js
 4. Installs `sysinfo.sh` CPU/MEM widget
-5. Adds tmux alias to `.zshrc`
-6. Enables Windows Terminal `builtinGlyphs`
+5. Adds tmux alias with `MSYS2_PATH_TYPE=inherit` to `.zshrc`
+6. Adds Windows tool paths (node, nvim, git, eza, claude) to `.zshrc`
+7. Enables Windows Terminal `builtinGlyphs`
 
 ### `install.ps1` (psmux)
 1. Generates hardcoded Catppuccin Mocha `~/.tmux.conf` via Node.js
