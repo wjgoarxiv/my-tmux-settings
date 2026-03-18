@@ -89,6 +89,11 @@ const termSetting = isWindows
   ? `set -g default-terminal "screen-256color"\nset -ga terminal-overrides ",*256color*:Tc"`
   : `set -g default-terminal "tmux-256color"\nset -ga terminal-overrides ",xterm-256color:Tc"`;
 
+// Synchronized output — terminal-features is the modern tmux (3.3a+) mechanism
+const termFeatures = isWindows
+  ? `set -ga terminal-features ",xterm-256color:Sync"\nset -ga terminal-features ",screen-256color:Sync"`
+  : `set -ga terminal-features ",xterm-256color:Sync"\nset -ga terminal-features ",tmux-256color:Sync"`;
+
 // ── Config template ─────────────────────────────────────────────
 const conf = `# ================================================================
 # my-tmux-settings — Catppuccin Mocha theme
@@ -134,6 +139,7 @@ ${termSetting}
 
 # ── Synchronized Output (DEC 2026) — eliminates Claude Code flicker ──
 set -ga terminal-overrides ",*:Sync"
+${termFeatures}
 
 # ── General ───────────────────────────────────────────────────────
 set -g mouse on
