@@ -99,7 +99,7 @@ ZPROFILE="$HOME/.zprofile"
 if [ -f "$ZPROFILE" ] && grep -q '/etc/profile' "$ZPROFILE" 2>/dev/null; then
   echo "✓ .zprofile already sources /etc/profile"
 else
-  printf '# Source MSYS2 system profile (PATH inheritance, MSYS2_PATH_TYPE)\nsource /etc/profile\n' > "$ZPROFILE"
+  printf "# Source MSYS2 system profile (PATH inheritance, MSYS2_PATH_TYPE)\n# Use sh emulation: /etc/profile is a bash script with globs that\n# fail under zsh's strict nomatch option.\nemulate sh -c 'source /etc/profile'\n" > "$ZPROFILE"
   echo "✓ .zprofile created (MSYS2 PATH inheritance)"
 fi
 
