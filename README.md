@@ -134,7 +134,7 @@ Running native tmux on Windows via MSYS2 + Git Bash requires several non-obvious
 | **conda "Could not determine home directory"** | Windows Python doesn't understand POSIX HOME path | Set `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH` in tmux.conf |
 | **tmux-256color terminfo missing** | MSYS2 doesn't ship tmux-256color | Use `screen-256color` instead |
 | **CRLF in plugin files** | Git clones with CRLF on Windows | Clone with `core.autocrlf=false` or sed fix |
-| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `claude`) | MSYS2 tmux doesn't inherit the Windows PATH | Add Windows tool paths to `~/.zshrc` PATH (see Troubleshooting) |
+| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `claude`) | MSYS2 tmux doesn't inherit the Windows PATH | `set-environment -g MSYS2_PATH_TYPE "inherit"` in tmux.conf (handled by installer) |
 
 ---
 
@@ -214,8 +214,8 @@ CRITICAL WINDOWS PITFALLS (the installer handles these, but know them):
      Use gen-config.js to generate a hardcoded config instead.
   6. MSYS2 doesn't have tmux-256color terminfo — use screen-256color.
   7. Set USERPROFILE/HOMEDRIVE/HOMEPATH in tmux.conf for Windows-native programs (conda, Python).
-  8. MSYS2 tmux does NOT inherit the Windows PATH. Add tool paths (node, git, claude, eza)
-     to ~/.zshrc PATH manually. Without this, CLI tools and Claude Code hooks will fail.
+  8. MSYS2 tmux does NOT inherit the Windows PATH. The config sets
+     MSYS2_PATH_TYPE=inherit so all Windows tools (node, git, claude, nvim, eza) are available.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Windows — psmux (PowerShell)
@@ -249,7 +249,4 @@ with powerline triangle segments, Nerd Font icons, and a CPU/MEM widget?
 
 **Claude Code flicker** → The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support.
 
-**Windows: `command not found` for node/git/eza/claude inside tmux** → MSYS2 tmux doesn't inherit the Windows PATH. Add the needed directories to `~/.zshrc`:
-```bash
-export PATH="$HOME/.local/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"
-```
+**Windows: `command not found` for node/git/eza/claude inside tmux** → Re-run `node customize/gen-config.js --windows` to regenerate the config with `MSYS2_PATH_TYPE=inherit`, which makes MSYS2 inherit the full Windows PATH.

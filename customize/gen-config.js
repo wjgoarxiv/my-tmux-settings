@@ -77,7 +77,8 @@ const defaultShell = isWindows
 
 const windowsEnv = isWindows
   ? `
-# ── Windows environment (for conda/Python compatibility) ─────────
+# ── Windows environment ──────────────────────────────────────────
+set-environment -g MSYS2_PATH_TYPE "inherit"
 set-environment -g USERPROFILE "C:\\\\Users\\\\${require('os').userInfo().username}"
 set-environment -g HOMEDRIVE "C:"
 set-environment -g HOMEPATH "\\\\Users\\\\${require('os').userInfo().username}"`
