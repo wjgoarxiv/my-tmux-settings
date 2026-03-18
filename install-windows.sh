@@ -94,7 +94,7 @@ fi
 # ── 9. Add Windows tool paths to .zshrc ────────────────────────
 # MSYS2 tmux doesn't fully inherit the Windows user PATH.
 # These paths ensure tools like node, nvim, git, eza, claude work inside tmux.
-PATH_LINE='export PATH="$HOME/.local/bin:/c/Program Files/Neovim/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"'
+PATH_LINE='export PATH="$HOME/.local/bin:$HOME/AppData/Roaming/npm:/c/Program Files/Neovim/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"'
 if grep -qF 'Program Files/nodejs' "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ Windows tool paths already in .zshrc"
 else
