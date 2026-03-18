@@ -42,7 +42,18 @@ else
   echo "✓ MSYS2 zsh installed"
 fi
 
-# ── 4. Fix MSYS2 HOME directory ──────────────────────────────────
+# ── 4. Install MSYS2 winpty ─────────────────────────────────────
+# Required for Windows console programs (claude, node) to get a TTY
+# inside MSYS2 tmux. Without it: "stdin is not a tty".
+if "$PACMAN" -Qs winpty &>/dev/null; then
+  echo "✓ MSYS2 winpty already installed"
+else
+  echo "Installing MSYS2 winpty..."
+  "$PACMAN" -S --noconfirm winpty
+  echo "✓ MSYS2 winpty installed"
+fi
+
+# ── 5. Fix MSYS2 HOME directory ──────────────────────────────────
 # By default MSYS2 sets HOME=/home/Username. This must be changed
 # to use the Windows home directory so zsh finds .zshrc, oh-my-zsh, etc.
 NSS_CONF="$MSYS2_ROOT/etc/nsswitch.conf"
@@ -54,14 +65,14 @@ else
   echo "✓ MSYS2 HOME set to Windows home ($USERPROFILE)"
 fi
 
-# ── 5. Remove psmux if it shadows tmux ───────────────────────────
+# ── 6. Remove psmux if it shadows tmux ───────────────────────────
 WINGET_TMUX="$HOME/AppData/Local/Microsoft/WinGet/Links/tmux"
 if [ -L "$WINGET_TMUX" ] && readlink "$WINGET_TMUX" | grep -qi psmux; then
   echo "⚠  psmux detected at $WINGET_TMUX (shadows native tmux)"
   echo "   Run from PowerShell: winget uninstall marlocarlo.psmux"
 fi
 
-# ── 6. Generate tmux.conf ────────────────────────────────────────
+# ── 7. Generate tmux.conf ────────────────────────────────────────
 # Uses gen-config.js to produce a self-contained Catppuccin Mocha config
 # with hardcoded powerline separators. The catppuccin/tmux plugin's
 # source -F "#{d:current_file}/..." syntax doesn't work on MSYS2 tmux.
@@ -74,13 +85,13 @@ echo "Generating ~/.tmux.conf (Catppuccin Mocha)..."
 node "$DIR/customize/gen-config.js" --windows
 echo "✓ ~/.tmux.conf installed"
 
-# ── 7. Install sysinfo script ────────────────────────────────────
+# ── 8. Install sysinfo script ────────────────────────────────────
 mkdir -p "$HOME/.tmux"
 cp "$DIR/scripts/sysinfo.sh" "$HOME/.tmux/sysinfo.sh"
 chmod +x "$HOME/.tmux/sysinfo.sh"
 echo "✓ ~/.tmux/sysinfo.sh installed (CPU/MEM widget)"
 
-# ── 8. Add tmux alias to .zshrc ──────────────────────────────────
+# ── 9. Add tmux alias to .zshrc ──────────────────────────────────
 ALIAS_LINE="alias tmux='MSYS2_PATH_TYPE=inherit /c/msys64/usr/bin/tmux.exe -u'"
 if grep -qF 'MSYS2_PATH_TYPE=inherit' "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ tmux alias already in .zshrc"
@@ -95,7 +106,7 @@ else
   echo "✓ tmux alias added to .zshrc"
 fi
 
-# ── 9. Add Windows tool paths to .zshrc ────────────────────────
+# ── 10. Add Windows tool paths to .zshrc ───────────────────────
 # MSYS2 tmux doesn't fully inherit the Windows user PATH.
 # These paths ensure tools like node, nvim, git, eza, claude work inside tmux.
 PATH_LINE='export PATH="$HOME/.local/bin:$HOME/AppData/Roaming/npm:/c/Program Files/Neovim/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"'
@@ -108,7 +119,7 @@ else
   echo "✓ Windows tool paths added to .zshrc"
 fi
 
-# ── 10. Enable Windows Terminal builtinGlyphs ────────────────────
+# ── 11. Enable Windows Terminal builtinGlyphs ────────────────────
 WT_SETTINGS="$HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
 if [ -f "$WT_SETTINGS" ]; then
   PYTHON=$(command -v python3 2>/dev/null || command -v python 2>/dev/null || echo "")
@@ -135,7 +146,7 @@ else
   echo "⚠  Windows Terminal settings not found (skipping builtinGlyphs)"
 fi
 
-# ── 11. Font reminder ────────────────────────────────────────────
+# ── 12. Font reminder ────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set Windows Terminal font to: JetBrainsMono Nerd Font"
