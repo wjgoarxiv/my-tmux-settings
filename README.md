@@ -226,7 +226,7 @@ STEP 4 — Font:           choco install -y nerd-fonts-JetBrainsMono
 STEP 5 — Set Windows Terminal font to "JetBrainsMono Nerd Font"
 STEP 6 — Run: psmux
 
-Confirm: is the Catppuccin Mocha status bar visible at the bottom
+Confirm: is the Catppuccin Mocha status bar visible at the top
 with powerline triangle segments, Nerd Font icons, and a CPU/MEM widget?
 ```
 
