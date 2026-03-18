@@ -91,7 +91,22 @@ else
   echo "✓ tmux alias added to .zshrc"
 fi
 
-# ── 9. Enable Windows Terminal builtinGlyphs ─────────────────────
+# ── 9. Add Windows tool paths to .zshrc ────────────────────────
+# MSYS2 tmux doesn't fully inherit the Windows user PATH.
+# These paths ensure tools like node, nvim, git, eza, claude work inside tmux.
+PATH_LINE='export PATH="$HOME/.local/bin:/c/Program Files/Neovim/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"'
+if grep -qF 'Program Files/nodejs' "$HOME/.zshrc" 2>/dev/null; then
+  echo "✓ Windows tool paths already in .zshrc"
+else
+  sed -i '/^# Environment/a\'"$PATH_LINE" "$HOME/.zshrc" 2>/dev/null || {
+    echo "" >> "$HOME/.zshrc"
+    echo "# Windows tool paths for MSYS2 tmux" >> "$HOME/.zshrc"
+    echo "$PATH_LINE" >> "$HOME/.zshrc"
+  }
+  echo "✓ Windows tool paths added to .zshrc"
+fi
+
+# ── 10. Enable Windows Terminal builtinGlyphs ────────────────────
 WT_SETTINGS="$HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
 if [ -f "$WT_SETTINGS" ]; then
   if python -c "
@@ -115,7 +130,7 @@ else
   echo "⚠  Windows Terminal settings not found (skipping builtinGlyphs)"
 fi
 
-# ── 10. Font reminder ────────────────────────────────────────────
+# ── 11. Font reminder ────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set Windows Terminal font to: JetBrainsMono Nerd Font"

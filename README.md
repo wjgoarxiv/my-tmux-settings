@@ -134,7 +134,7 @@ Running native tmux on Windows via MSYS2 + Git Bash requires several non-obvious
 | **conda "Could not determine home directory"** | Windows Python doesn't understand POSIX HOME path | Set `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH` in tmux.conf |
 | **tmux-256color terminfo missing** | MSYS2 doesn't ship tmux-256color | Use `screen-256color` instead |
 | **CRLF in plugin files** | Git clones with CRLF on Windows | Clone with `core.autocrlf=false` or sed fix |
-| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `claude`) | MSYS2 tmux doesn't inherit the Windows PATH | `MSYS2_PATH_TYPE=inherit` in tmux alias (handled by installer) |
+| **Tools missing in tmux zsh** (`node`, `git`, `eza`, `nvim`, `claude`) | MSYS2 tmux doesn't fully inherit the Windows user PATH | Explicit PATH export in `.zshrc` + `MSYS2_PATH_TYPE=inherit` in tmux alias (handled by installer) |
 
 ---
 
@@ -214,8 +214,8 @@ CRITICAL WINDOWS PITFALLS (the installer handles these, but know them):
      Use gen-config.js to generate a hardcoded config instead.
   6. MSYS2 doesn't have tmux-256color terminfo — use screen-256color.
   7. Set USERPROFILE/HOMEDRIVE/HOMEPATH in tmux.conf for Windows-native programs (conda, Python).
-  8. MSYS2 tmux does NOT inherit the Windows PATH. The config sets
-     MSYS2_PATH_TYPE=inherit so all Windows tools (node, git, claude, nvim, eza) are available.
+  8. MSYS2 tmux does NOT fully inherit the Windows user PATH. The installer adds
+     MSYS2_PATH_TYPE=inherit to the tmux alias and explicit PATH entries to .zshrc.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Windows — psmux (PowerShell)
@@ -249,4 +249,4 @@ with powerline triangle segments, Nerd Font icons, and a CPU/MEM widget?
 
 **Claude Code flicker** → The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support.
 
-**Windows: `command not found` for node/git/eza/claude inside tmux** → Ensure your tmux alias includes `MSYS2_PATH_TYPE=inherit`: `alias tmux='MSYS2_PATH_TYPE=inherit /c/msys64/usr/bin/tmux.exe -u'`. Re-run `install-windows.sh` to fix automatically.
+**Windows: `command not found` for node/git/eza/nvim/claude inside tmux** → Re-run `install-windows.sh` to add `MSYS2_PATH_TYPE=inherit` to the tmux alias and Windows tool paths to `.zshrc`.
