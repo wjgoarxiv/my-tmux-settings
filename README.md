@@ -69,12 +69,13 @@ powershell -File $HOME/my-tmux-settings/install.ps1
 
 ### `install-windows.sh` (MSYS2 native tmux)
 1. Installs MSYS2 tmux and zsh via pacman
-2. Fixes MSYS2 HOME to use Windows home directory
-3. Generates hardcoded Catppuccin Mocha `~/.tmux.conf` via Node.js
-4. Installs `sysinfo.sh` CPU/MEM widget
-5. Adds tmux alias with `MSYS2_PATH_TYPE=inherit` to `.zshrc`
-6. Adds Windows tool paths (node, nvim, git, eza, claude) to `.zshrc`
-7. Enables Windows Terminal `builtinGlyphs`
+2. Installs MSYS2 winpty (required for Windows console programs to get a TTY inside tmux)
+3. Fixes MSYS2 HOME to use Windows home directory
+4. Generates hardcoded Catppuccin Mocha `~/.tmux.conf` via Node.js
+5. Installs `sysinfo.sh` CPU/MEM widget
+6. Adds tmux alias with `MSYS2_PATH_TYPE=inherit` to `.zshrc`
+7. Adds Windows tool paths (node, nvim, git, eza, claude) to `.zshrc`
+8. Enables Windows Terminal `builtinGlyphs`
 
 ### `install.ps1` (psmux)
 1. Generates hardcoded Catppuccin Mocha `~/.tmux.conf` via Node.js
@@ -136,6 +137,7 @@ Running native tmux on Windows via MSYS2 + Git Bash requires several non-obvious
 | **tmux-256color terminfo missing** | MSYS2 doesn't ship tmux-256color | Use `screen-256color` instead |
 | **CRLF in plugin files** | Git clones with CRLF on Windows | Clone with `core.autocrlf=false` or sed fix |
 | **Tools missing in tmux zsh** (`node`, `git`, `eza`, `nvim`, `claude`) | MSYS2 tmux doesn't fully inherit the Windows user PATH | Explicit PATH export in `.zshrc` + `MSYS2_PATH_TYPE=inherit` in tmux alias (handled by installer) |
+| **"stdin is not a tty"** for Windows console programs | Windows-native executables (node, claude) need a PTY adapter inside MSYS2 tmux | Install MSYS2 winpty via `pacman -S winpty` (handled by installer) |
 
 ---
 
@@ -186,12 +188,13 @@ STEP 2 — Run installer (from Git Bash):
   bash ~/my-tmux-settings/install-windows.sh
 
   The installer automatically:
-  a) Installs tmux + zsh in MSYS2 via pacman
+  a) Installs tmux + zsh + winpty in MSYS2 via pacman
   b) Fixes MSYS2 HOME directory (nsswitch.conf → db_home: windows)
   c) Generates Catppuccin Mocha ~/.tmux.conf via gen-config.js --windows
   d) Installs sysinfo.sh (CPU/MEM widget)
   e) Adds tmux alias to ~/.zshrc
-  f) Enables Windows Terminal builtinGlyphs
+  f) Adds Windows tool paths to ~/.zshrc
+  g) Enables Windows Terminal builtinGlyphs
 
 STEP 3 — Remove psmux if installed (from PowerShell):
   winget uninstall marlocarlo.psmux
@@ -217,6 +220,8 @@ CRITICAL WINDOWS PITFALLS (the installer handles these, but know them):
   7. Set USERPROFILE/HOMEDRIVE/HOMEPATH in tmux.conf for Windows-native programs (conda, Python).
   8. MSYS2 tmux does NOT fully inherit the Windows user PATH. The installer adds
      MSYS2_PATH_TYPE=inherit to the tmux alias and explicit PATH entries to .zshrc.
+  9. Windows console programs (node, claude) need winpty for TTY support inside
+     MSYS2 tmux. Without it you get "stdin is not a tty". The installer adds winpty via pacman.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Windows — psmux (PowerShell)
@@ -247,6 +252,8 @@ with powerline triangle segments, Nerd Font icons, and a CPU/MEM widget?
 **Windows: powerline chars are tiny slivers** → Enable `builtinGlyphs` in Windows Terminal and run tmux with `-u` flag.
 
 **Windows: conda errors about home directory** → The config sets USERPROFILE/HOMEDRIVE/HOMEPATH. Re-run `node customize/gen-config.js --windows`.
+
+**Windows: "stdin is not a tty"** → Install winpty: `/c/msys64/usr/bin/pacman.exe -S --noconfirm winpty`. Re-run `install-windows.sh` to install automatically.
 
 **Claude Code flicker** → The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support.
 
