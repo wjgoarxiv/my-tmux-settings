@@ -106,7 +106,31 @@ else
   echo "✓ tmux alias added to .zshrc"
 fi
 
-# ── 10. Add Windows tool paths to .zshrc ───────────────────────
+# ── 10. Add tmux split-pane directory hooks to .zshrc ─────────
+# MSYS2 tmux can't track pane_current_path (no /proc/<pid>/cwd),
+# and zsh ignores split-window -c. These hooks pass the cwd via env var.
+if grep -qF 'TMUX_CWD' "$HOME/.zshrc" 2>/dev/null; then
+  echo "✓ tmux split-pane directory hooks already in .zshrc"
+else
+  cat >> "$HOME/.zshrc" << 'ZSHRC_HOOKS'
+
+# Inherit directory from tmux split pane
+if [[ -n "$TMUX_CWD" ]]; then
+  cd "$TMUX_CWD"
+  unset TMUX_CWD
+fi
+
+# Tell tmux the current directory so split panes inherit it
+if [[ -n "$TMUX" ]]; then
+  _tmux_cwd() { tmux set-option -p -t "$TMUX_PANE" @cwd "$PWD" 2>/dev/null; }
+  chpwd_functions+=(_tmux_cwd)
+  _tmux_cwd
+fi
+ZSHRC_HOOKS
+  echo "✓ tmux split-pane directory hooks added to .zshrc"
+fi
+
+# ── 11. Add Windows tool paths to .zshrc ───────────────────────
 # MSYS2 tmux doesn't fully inherit the Windows user PATH.
 # These paths ensure tools like node, nvim, git, eza, claude work inside tmux.
 PATH_LINE='export PATH="$HOME/.local/bin:$HOME/AppData/Roaming/npm:/c/Program Files/Neovim/bin:/c/Program Files/nodejs:/c/ProgramData/chocolatey/bin:/c/Program Files/Git/cmd:$HOME/AppData/Local/Microsoft/WinGet/Links:$PATH"'

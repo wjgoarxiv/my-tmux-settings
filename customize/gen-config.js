@@ -159,8 +159,15 @@ bind-key -T copy-mode-vi WheelDownPane send-keys -X -N 2 scroll-down
 
 # ── Key bindings ──────────────────────────────────────────────────
 bind r source-file ~/.tmux.conf \\; display "  Config reloaded!"
-bind | split-window -h -c "#{pane_current_path}"
+${isWindows
+  ? `bind | run-shell '/c/msys64/usr/bin/tmux.exe split-window -h -e "TMUX_CWD=#{@cwd}"'
+bind - run-shell '/c/msys64/usr/bin/tmux.exe split-window -v -e "TMUX_CWD=#{@cwd}"'
+bind '"' run-shell '/c/msys64/usr/bin/tmux.exe split-window -v -e "TMUX_CWD=#{@cwd}"'
+bind % run-shell '/c/msys64/usr/bin/tmux.exe split-window -h -e "TMUX_CWD=#{@cwd}"'`
+  : `bind | split-window -h -c "#{pane_current_path}"
 bind - split-window -v -c "#{pane_current_path}"
+bind '"' split-window -v -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"`}
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
