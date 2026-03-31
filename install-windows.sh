@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # install-windows.sh — Windows (Git Bash + MSYS2 native tmux) installer
-# Installs Catppuccin Mocha tmux config for native tmux on Windows
+# Installs Tokyonight Night tmux config for native tmux on Windows
 #
 # IMPORTANT: This script should be run from Git Bash (not from MSYS2 shell).
 # It sets up MSYS2 tmux + MSYS2 zsh as a native tmux environment on Windows.
@@ -73,15 +73,14 @@ if [ -L "$WINGET_TMUX" ] && readlink "$WINGET_TMUX" | grep -qi psmux; then
 fi
 
 # ── 7. Generate tmux.conf ────────────────────────────────────────
-# Uses gen-config.js to produce a self-contained Catppuccin Mocha config
-# with hardcoded powerline separators. The catppuccin/tmux plugin's
-# source -F "#{d:current_file}/..." syntax doesn't work on MSYS2 tmux.
+# Uses gen-config.js to produce a self-contained Tokyonight Night config
+# with hardcoded powerline separators.
 if ! command -v node &>/dev/null; then
   echo "ERROR: Node.js required for config generation."
   echo "Install: winget install OpenJS.NodeJS"
   exit 1
 fi
-echo "Generating ~/.tmux.conf (Catppuccin Mocha)..."
+echo "Generating ~/.tmux.conf (Tokyonight Night)..."
 node "$DIR/customize/gen-config.js" --windows
 echo "✓ ~/.tmux.conf installed"
 
@@ -143,7 +142,7 @@ else
   echo "✓ Windows tool paths added to .zshrc"
 fi
 
-# ── 11. Enable Windows Terminal builtinGlyphs ────────────────────
+# ── 12. Enable Windows Terminal builtinGlyphs ────────────────────
 WT_SETTINGS="$HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
 if [ -f "$WT_SETTINGS" ]; then
   PYTHON=$(command -v python3 2>/dev/null || command -v python 2>/dev/null || echo "")
@@ -170,7 +169,7 @@ else
   echo "⚠  Windows Terminal settings not found (skipping builtinGlyphs)"
 fi
 
-# ── 12. Font reminder ────────────────────────────────────────────
+# ── 13. Font reminder ────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set Windows Terminal font to: JetBrainsMono Nerd Font"

@@ -1,5 +1,5 @@
 /**
- * gen-config.js — Generates ~/.tmux.conf with Catppuccin Mocha theme
+ * gen-config.js — Generates ~/.tmux.conf with Tokyonight Night theme
  * No TPM, no bash required. Works on macOS, Linux, Windows (psmux & MSYS2 native).
  * Requires Node.js.
  *
@@ -22,53 +22,48 @@ const ICON_DIR  = '\uF07B';   // fa-folder
 const ICON_APP  = '\uF120';   // fa-terminal
 const ICON_CPU  = '\uF2DB';   // fa-microchip
 
-// ── Catppuccin Mocha palette ────────────────────────────────────
-// https://github.com/catppuccin/catppuccin
-const base     = '#1e1e2e';
-const mantle   = '#181825';
-const crust    = '#11111b';
-const surface0 = '#313244';
-const surface1 = '#45475a';
-const overlay0 = '#6c7086';
-const overlay2 = '#9399b2';
-const text     = '#cdd6f4';
-const subtext0 = '#a6adc8';
-const blue     = '#89b4fa';
-const green    = '#a6e3a1';
-const peach    = '#fab387';
-const pink     = '#f5c2e7';
-const mauve    = '#cba6f7';
-const red      = '#f38ba8';
-const maroon   = '#eba0ac';
-const yellow   = '#f9e2af';
-const lavender = '#b4befe';
-const teal     = '#94e2d5';
-const rosewater= '#f5e0dc';
+// ── Tokyonight Night palette ────────────────────────────────────
+// https://github.com/folke/tokyonight.nvim
+const bg      = '#1a1b26';
+const dark    = '#16161e';
+const fg      = '#c0caf5';
+const comment = '#565f89';
+const gutter  = '#3b4261';
+const surface = '#3b4261';
+const overlay = '#9aa5ce';
+const subtext = '#a9b1d6';
+const blue    = '#7aa2f7';
+const cyan    = '#7dcfff';
+const green   = '#9ece6a';
+const orange  = '#ff9e64';
+const violet  = '#bb9af7';
+const red     = '#f7768e';
+const yellow  = '#e0af68';
 
 // ── Status bar layout (powerline triangles) ─────────────────────
 const statusLeft =
-  `#[fg=${crust},bg=${green}] ${ICON_SESS} #S #[fg=${green},bg=${mantle}]${TR} `;
+  `#[fg=${dark},bg=${green}] ${ICON_SESS} #S #[fg=${green},bg=${bg}]${TR} `;
 
 const winInactive =
-  `#[fg=${overlay2},bg=${mantle}]${TL}#[fg=${crust},bg=${overlay2}] #I ` +
-  `#[fg=${overlay2},bg=${surface0}]${TR}#[fg=${text},bg=${surface0}] #W ` +
-  `#[fg=${surface0},bg=${mantle}]${TR}`;
+  `#[fg=${overlay},bg=${bg}]${TL}#[fg=${dark},bg=${overlay}] #I ` +
+  `#[fg=${overlay},bg=${gutter}]${TR}#[fg=${fg},bg=${gutter}] #W ` +
+  `#[fg=${gutter},bg=${bg}]${TR}`;
 
 const winActive =
-  `#[fg=${mauve},bg=${mantle}]${TL}#[fg=${crust},bg=${mauve}] #I ` +
-  `#[fg=${mauve},bg=${surface1}]${TR}#[fg=${text},bg=${surface1}] #W ` +
-  `#[fg=${surface1},bg=${mantle}]${TR}`;
+  `#[fg=${blue},bg=${bg}]${TL}#[fg=${dark},bg=${blue}] #I ` +
+  `#[fg=${blue},bg=${surface}]${TR}#[fg=${fg},bg=${surface}] #W ` +
+  `#[fg=${surface},bg=${bg}]${TR}`;
 
 const statusRight =
-  `#[fg=${rosewater},bg=${mantle}]${TL}#[fg=${crust},bg=${rosewater}] ${ICON_DIR} ` +
-  `#[fg=${rosewater},bg=${surface0}]${TR}#[fg=${text},bg=${surface0}] #{b:pane_current_path} ` +
-  `#[fg=${surface0},bg=${mantle}]${TR}` +
-  ` #[fg=${maroon},bg=${mantle}]${TL}#[fg=${crust},bg=${maroon}] ${ICON_APP} ` +
-  `#[fg=${maroon},bg=${surface0}]${TR}#[fg=${text},bg=${surface0}] #{pane_current_command} ` +
-  `#[fg=${surface0},bg=${mantle}]${TR}` +
-  ` #[fg=${blue},bg=${mantle}]${TL}#[fg=${crust},bg=${blue}] ${ICON_CPU} ` +
-  `#[fg=${blue},bg=${surface0}]${TR}#[fg=${text},bg=${surface0}] #(~/.tmux/sysinfo.sh) ` +
-  `#[fg=${surface0},bg=${mantle}]${TR}`;
+  `#[fg=${comment},bg=${bg}]${TL}#[fg=${fg},bg=${comment}] ${ICON_DIR} ` +
+  `#[fg=${comment},bg=${gutter}]${TR}#[fg=${fg},bg=${gutter}] #{b:pane_current_path} ` +
+  `#[fg=${gutter},bg=${bg}]${TR}` +
+  ` #[fg=${orange},bg=${bg}]${TL}#[fg=${dark},bg=${orange}] ${ICON_APP} ` +
+  `#[fg=${orange},bg=${gutter}]${TR}#[fg=${fg},bg=${gutter}] #{pane_current_command} ` +
+  `#[fg=${gutter},bg=${bg}]${TR}` +
+  ` #[fg=${blue},bg=${bg}]${TL}#[fg=${dark},bg=${blue}] ${ICON_CPU} ` +
+  `#[fg=${blue},bg=${gutter}]${TR}#[fg=${fg},bg=${gutter}] #(~/.tmux/sysinfo.sh) ` +
+  `#[fg=${gutter},bg=${bg}]${TR}`;
 
 // ── Platform-specific settings ──────────────────────────────────
 const defaultShell = isWindows
@@ -96,7 +91,7 @@ const termFeatures = isWindows
 
 // ── Config template ─────────────────────────────────────────────
 const conf = `# ================================================================
-# my-tmux-settings — Catppuccin Mocha theme
+# my-tmux-settings — Tokyonight Night theme
 # ${isWindows ? 'Windows (MSYS2 native tmux + Git Bash zsh)' : 'macOS / Linux / WSL2'}
 # Font: JetBrainsMono Nerd Font  https://www.nerdfonts.com
 # Repo: https://github.com/wjgoarxiv/my-tmux-settings
@@ -111,18 +106,18 @@ ${defaultShell}
 ${windowsEnv}
 
 # Pane borders
-set -g pane-border-style "fg=${surface1}"
-set -g pane-active-border-style "fg=${mauve}"
+set -g pane-border-style "fg=${gutter}"
+set -g pane-active-border-style "fg=${blue}"
 
 # Message bar
-set -g message-style "bg=${surface0},fg=${text}"
-set -g message-command-style "bg=${surface0},fg=${text}"
-set -g mode-style "bg=${mauve},fg=${text}"
+set -g message-style "bg=${blue},fg=${dark},bold"
+set -g message-command-style "bg=${yellow},fg=${dark},bold"
+set -g mode-style "bg=${violet},fg=${fg}"
 
 # ── Status bar ───────────────────────────────────────────────────
 set -g status-interval 5
 set -g status-position top
-set -g status-style "bg=${mantle},fg=${text}"
+set -g status-style "bg=${bg},fg=${fg}"
 set -g status-left-length 100
 set -g status-right-length 100
 
@@ -132,7 +127,7 @@ set -g status-right "${statusRight}"
 set -g window-status-format "${winInactive}"
 set -g window-status-current-format "${winActive}"
 set -g window-status-separator " "
-set -g window-status-activity-style "fg=${peach},bg=${mantle}"
+set -g window-status-activity-style "fg=${orange},bg=${bg}"
 
 # ── Colors ────────────────────────────────────────────────────────
 ${termSetting}

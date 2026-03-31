@@ -1,5 +1,5 @@
 # install.ps1 — Windows (psmux) installer
-# No bash/TPM needed. Uses Node.js to generate hardcoded Catppuccin Mocha config.
+# No bash/TPM needed. Uses Node.js to generate hardcoded Tokyonight Night config.
 $ErrorActionPreference = "Stop"
 $DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -14,7 +14,7 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
 Write-Host ("✓ Node.js " + (node --version)) -ForegroundColor Green
 
 # 2. Generate ~/.tmux.conf
-Write-Host "Generating ~/.tmux.conf (Catppuccin Mocha, hardcoded)..." -ForegroundColor Yellow
+Write-Host "Generating ~/.tmux.conf (Tokyonight Night, hardcoded)..." -ForegroundColor Yellow
 node "$DIR\customize\gen-config.js"
 
 # 3. Install sysinfo script
