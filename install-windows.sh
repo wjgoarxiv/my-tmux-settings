@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# install-windows.sh — Windows (Git Bash + MSYS2 native tmux) installer
-# Installs Catppuccin Mocha tmux config for native tmux on Windows
+# install-windows.sh — Windows (MSYS2 native tmux) installer
+# Installs Tokyonight Night tmux config for native tmux on Windows
 #
-# IMPORTANT: This script should be run from Git Bash (not from MSYS2 shell).
-# It sets up MSYS2 tmux + MSYS2 zsh as a native tmux environment on Windows.
+# Run from Git Bash or MSYS2 shell.
 set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -61,18 +60,9 @@ if [ -L "$WINGET_TMUX" ] && readlink "$WINGET_TMUX" | grep -qi psmux; then
   echo "   Run from PowerShell: winget uninstall marlocarlo.psmux"
 fi
 
-# ── 6. Generate tmux.conf ────────────────────────────────────────
-# Uses gen-config.js to produce a self-contained Catppuccin Mocha config
-# with hardcoded powerline separators. The catppuccin/tmux plugin's
-# source -F "#{d:current_file}/..." syntax doesn't work on MSYS2 tmux.
-if ! command -v node &>/dev/null; then
-  echo "ERROR: Node.js required for config generation."
-  echo "Install: winget install OpenJS.NodeJS"
-  exit 1
-fi
-echo "Generating ~/.tmux.conf (Catppuccin Mocha)..."
-node "$DIR/customize/gen-config.js" --windows
-echo "✓ ~/.tmux.conf installed"
+# ── 6. Install tmux.conf ────────────────────────────────────────
+cp "$DIR/tmux-windows.conf" "$HOME/.tmux.conf"
+echo "✓ ~/.tmux.conf installed (Tokyonight Night theme)"
 
 # ── 7. Install sysinfo script ────────────────────────────────────
 mkdir -p "$HOME/.tmux"
@@ -81,13 +71,12 @@ chmod +x "$HOME/.tmux/sysinfo.sh"
 echo "✓ ~/.tmux/sysinfo.sh installed (CPU/MEM widget)"
 
 # ── 8. Add tmux alias to .zshrc ──────────────────────────────────
-ALIAS_LINE="alias tmux='/c/msys64/usr/bin/tmux.exe -u'"
 if grep -qF "alias tmux=" "$HOME/.zshrc" 2>/dev/null; then
   echo "✓ tmux alias already in .zshrc"
 else
   echo "" >> "$HOME/.zshrc"
   echo "# Native MSYS2 tmux with UTF-8 mode" >> "$HOME/.zshrc"
-  echo "$ALIAS_LINE" >> "$HOME/.zshrc"
+  echo "alias tmux='/usr/bin/tmux -u'" >> "$HOME/.zshrc"
   echo "✓ tmux alias added to .zshrc"
 fi
 

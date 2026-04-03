@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # install.sh — Mac / WSL2 / Linux installer
-# Installs Catppuccin Mocha tmux config with catppuccin/tmux plugin
+# Installs Tokyonight Night tmux config (self-contained, no plugins needed)
 set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -15,28 +15,17 @@ if ! command -v tmux &>/dev/null; then
 fi
 echo "✓ $(tmux -V)"
 
-# 2. Install catppuccin/tmux plugin
-PLUGIN_DIR="$HOME/.config/tmux/plugins/catppuccin/tmux"
-if [ -d "$PLUGIN_DIR" ]; then
-  echo "✓ catppuccin/tmux plugin already installed"
-else
-  echo "Installing catppuccin/tmux plugin..."
-  mkdir -p "$(dirname "$PLUGIN_DIR")"
-  git clone https://github.com/catppuccin/tmux.git "$PLUGIN_DIR"
-  echo "✓ catppuccin/tmux plugin installed"
-fi
-
-# 3. Copy tmux.conf → ~/.tmux.conf
+# 2. Copy tmux.conf → ~/.tmux.conf
 cp "$DIR/tmux.conf" "$HOME/.tmux.conf"
-echo "✓ ~/.tmux.conf installed (Catppuccin Mocha theme)"
+echo "✓ ~/.tmux.conf installed (Tokyonight Night theme)"
 
-# 4. Install sysinfo script
+# 3. Install sysinfo script
 mkdir -p "$HOME/.tmux"
 cp "$DIR/scripts/sysinfo.sh" "$HOME/.tmux/sysinfo.sh"
 chmod +x "$HOME/.tmux/sysinfo.sh"
 echo "✓ ~/.tmux/sysinfo.sh installed (CPU/MEM widget)"
 
-# 5. Font reminder
+# 4. Font reminder
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Set terminal font to: JetBrainsMono Nerd Font"
