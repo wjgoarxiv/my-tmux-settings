@@ -1,8 +1,8 @@
 # my-tmux-settings
 
-Tokyonight Night tmux configuration with powerline status bar, Nerd Font icons, and CPU/MEM widget.
+Tokyonight Night tmux configuration with powerline status bar, Nerd Font icons, and a CPU/MEM widget.
 
-Supports **macOS / WSL2 / Linux** and **Windows native tmux** (MSYS2). Self-contained — no plugins required.
+Supports macOS, WSL2, Linux, and Windows native tmux via MSYS2. Self-contained, with no plugins required.
 
 ---
 
@@ -10,22 +10,23 @@ Supports **macOS / WSL2 / Linux** and **Windows native tmux** (MSYS2). Self-cont
 
 | Platform | Config | Shell | Theme |
 |---|---|---|---|
-| **macOS / WSL2 / Linux** | `tmux.conf` | Any | Tokyonight Night |
-| **Windows (MSYS2 native tmux)** | `tmux-windows.conf` | MSYS2 zsh | Tokyonight Night |
-| **Windows (psmux)** | `tmux-windows.conf` | PowerShell | Tokyonight Night |
+| macOS / WSL2 / Linux | `tmux.conf` | Any | Tokyonight Night |
+| Windows (MSYS2 native tmux) | `tmux-windows.conf` | MSYS2 zsh | Tokyonight Night |
+| Windows (psmux) | `tmux-windows.conf` | PowerShell | Tokyonight Night |
 
 ---
 
 ## Requirements
 
 ### macOS / WSL2 / Linux
-- tmux (`brew install tmux` / `apt install tmux`)
-- [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `brew install --cask font-jetbrains-mono-nerd-font`
+- tmux (`brew install tmux` or `apt install tmux`)
+- [JetBrainsMono Nerd Font](https://www.nerdfonts.com)
 
-### Windows (MSYS2 native tmux) — Recommended
-- [MSYS2](https://www.msys2.org) (for native tmux + zsh)
-- zsh + oh-my-zsh + powerlevel10k (in MSYS2)
-- [JetBrainsMono Nerd Font](https://www.nerdfonts.com): `choco install -y nerd-fonts-JetBrainsMono`
+### Windows (MSYS2 native tmux) - Recommended
+- [MSYS2](https://www.msys2.org)
+- MSYS2 `tmux` and `zsh`
+- oh-my-zsh + powerlevel10k inside MSYS2
+- [JetBrainsMono Nerd Font](https://www.nerdfonts.com)
 - [Windows Terminal](https://aka.ms/terminal) with `builtinGlyphs` enabled
 
 ---
@@ -38,14 +39,14 @@ git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 bash ~/my-tmux-settings/install.sh
 ```
 
-### Windows (MSYS2 native tmux) — Recommended
+### Windows (MSYS2 native tmux) - Recommended
 ```bash
 # Run from Git Bash or MSYS2 shell
 git clone https://github.com/wjgoarxiv/my-tmux-settings ~/my-tmux-settings
 bash ~/my-tmux-settings/install-windows.sh
 ```
 
-### Windows (psmux)
+### Windows (psmux, only if you explicitly want psmux)
 ```powershell
 git clone https://github.com/wjgoarxiv/my-tmux-settings $HOME/my-tmux-settings
 powershell -File $HOME/my-tmux-settings/install.ps1
@@ -56,17 +57,17 @@ powershell -File $HOME/my-tmux-settings/install.ps1
 ## What's Included
 
 ### Config Files
-- **`tmux.conf`** — Tokyonight Night for Mac/Linux/WSL2
-- **`tmux-windows.conf`** — Tokyonight Night for Windows MSYS2 (includes Windows env vars, `escape-time 10`)
-- **`zshrc`** — Reference `.zshrc` with lazy-load conda, DuoNA proxy auto-detect, P10k, and AI CLI aliases
+- `tmux.conf`: Tokyonight Night for macOS, Linux, and WSL2
+- `tmux-windows.conf`: Tokyonight Night for Windows MSYS2
+- `zshrc`: Reference `.zshrc` with lazy-load conda, DuoNA proxy autodetect, P10k, and AI CLI aliases
 
 ### Scripts
-- **`scripts/sysinfo.sh`** — Cross-platform CPU/MEM widget (uses `typeperf` on Windows instead of PowerShell for speed)
+- `scripts/sysinfo.sh`: Cross-platform CPU/MEM widget
 
 ### Installers
-- **`install.sh`** — Mac/Linux (copies config + sysinfo)
-- **`install-windows.sh`** — Windows MSYS2 (installs tmux/zsh via pacman, fixes HOME, copies config, enables builtinGlyphs)
-- **`install.ps1`** — Windows psmux (copies config + sysinfo)
+- `install.sh`: macOS and Linux installer
+- `install-windows.sh`: Windows MSYS2 installer
+- `install.ps1`: Windows psmux installer
 
 ---
 
@@ -86,67 +87,61 @@ powershell -File $HOME/my-tmux-settings/install.ps1
 
 ## Features
 
-- **Tokyonight Night** color scheme across status bar, panes, and messages
-- **Powerline triangle** segments with Nerd Font icons
-- **CPU/MEM** widget via `sysinfo.sh` (cross-platform: macOS, Linux, Windows)
-- **DEC 2026 Synchronized Output** — eliminates flicker in Claude Code and other fast-output tools
-- **focus-events** enabled for better editor integration
-- **Mouse** support with tuned scroll speed
-- **allow-passthrough** for image/sixel protocols
+- Tokyonight Night color scheme across status bar, panes, and messages
+- Powerline triangle segments with Nerd Font icons
+- CPU/MEM widget via `sysinfo.sh`
+- DEC 2026 synchronized output support to reduce fast-output flicker
+- `focus-events` enabled
+- Mouse support with tuned scroll speed
+- `allow-passthrough` enabled
 
 ### zshrc Highlights
-- **Lazy-load conda** — defers ~9s of conda init until first use
-- **DuoNA proxy auto-detection** — bridges corporate network for external API access
-- **AI CLI aliases** — `c`=claude, `cx`=codex, `g`=gemini, `oc`=opencode
-- **P10k instant prompt** — visible prompt before zsh finishes loading
+- Lazy-load conda to avoid heavy startup cost
+- DuoNA proxy autodetect
+- AI CLI aliases: `c`, `cx`, `g`, `oc`
+- P10k instant prompt
+- MSYS2 tmux pinning for UCRT64 zsh
 
 ---
 
-## Tokyonight Night Palette
+## Windows MSYS2 Native tmux Notes
 
-| Color | Hex | Usage |
-|---|---|---|
-| Background | `#1a1b26` | Status bar bg |
-| Foreground | `#c0caf5` | Text |
-| Blue | `#7aa2f7` | Active pane/window, sysinfo segment |
-| Green | `#9ece6a` | Session name |
-| Orange | `#ff9e64` | App segment, activity |
-| Purple | `#bb9af7` | Copy mode |
-| Yellow | `#e0af68` | Command mode |
-| Dark blue | `#3b4261` | Pane borders, segment bg |
-| Muted | `#565f89` | Directory segment |
+Running native tmux on Windows via MSYS2 requires a few non-obvious fixes. The installer handles these automatically.
 
----
-
-## Windows MSYS2 Native tmux — Technical Notes
-
-Running native tmux on Windows via MSYS2 requires several non-obvious fixes. These are all handled by `install-windows.sh`, but documented here for reference:
+If you are not intentionally using psmux, remove it. Leaving the WinGet `psmux` shim installed can silently shadow MSYS2 tmux and break OMX, Codex, and detached-session behavior.
 
 | Issue | Root Cause | Fix |
 |---|---|---|
-| **psmux shadows tmux** | WinGet installs psmux as `tmux` in PATH | Uninstall psmux or alias tmux to MSYS2 binary |
-| **Shell produces no output** | Git Bash zsh uses different MSYS2 runtime (msys-2.0.dll) than MSYS2 tmux | Install zsh in MSYS2 via `pacman -S zsh` |
-| **HOME is /home/Username** | MSYS2 default `nsswitch.conf` uses `db_home: cygwin` | Change to `db_home: windows` |
-| **Powerline chars render as blocks** | tmux `-u` flag missing | Add `-u` flag to tmux alias |
-| **Powerline chars render as slivers** | Windows Terminal uses font glyphs | Enable `builtinGlyphs: true` in WT settings |
-| **conda "Could not determine home directory"** | Windows Python doesn't understand POSIX HOME | Set `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH` in tmux.conf |
-| **Claude Code flicker in tmux** | Missing synchronized output support | Add DEC 2026 Sync terminal overrides |
-| **Slow zsh startup (~14s)** | conda.exe spawned 3x at startup (double activation) | Lazy-load conda, cache hook output |
+| psmux shadows tmux | WinGet installs `psmux` as `tmux.exe` under `%LOCALAPPDATA%\\Microsoft\\WinGet\\Links` | Remove the WinGet shim and pin `tmux` to `/c/msys64/usr/bin/tmux.exe -u` |
+| Shell produces no output | Git Bash zsh uses a different MSYS2 runtime than MSYS2 tmux | Install `zsh` in MSYS2 via `pacman -S zsh` |
+| HOME is `/home/Username` | MSYS2 default `nsswitch.conf` uses `db_home: cygwin` | Change to `db_home: windows` |
+| Powerline chars render as blocks | tmux `-u` flag missing | Add `-u` flag to the tmux alias |
+| Powerline chars render as slivers | Windows Terminal falls back to font glyph shaping | Enable `builtinGlyphs: true` |
+| Conda cannot determine home directory | Windows Python does not understand POSIX HOME | Set `USERPROFILE`, `HOMEDRIVE`, and `HOMEPATH` in tmux config |
+| Claude Code flicker in tmux | Missing synchronized output support | Add DEC 2026 sync terminal overrides |
+| Detached sessions die unexpectedly | Blind stale-socket cleanup removes live tmux sockets | Probe with `tmux ls` before deleting the socket |
 
 ---
 
 ## Troubleshooting
 
-**Icons show as boxes** — Font not applied. Restart terminal after font install.
+**Icons show as boxes**  
+The font is not applied. Restart the terminal after installing the font.
 
-**Config not updating** — `Ctrl+b r` reloads config instantly.
+**Windows: shell opens but no output**  
+You are using Git Bash's zsh inside MSYS2 tmux. Use `install-windows.sh` so tmux launches MSYS2's own zsh.
 
-**Windows: shell opens but no output** — You're using Git Bash's zsh inside MSYS2 tmux. Run `install-windows.sh` to install MSYS2's own zsh.
+**Windows: OMX / Codex shows `psmux: no server running on session 'default'`**  
+Your shell is still finding WinGet `psmux` instead of MSYS2 tmux. Remove `%LOCALAPPDATA%\\Microsoft\\WinGet\\Links\\tmux.exe` and use the repo's `tmux` alias, which pins `/c/msys64/usr/bin/tmux.exe -u`.
 
-**Windows: powerline chars are tiny slivers** — Enable `builtinGlyphs` in Windows Terminal and run tmux with `-u` flag.
+**Windows: powerline chars are tiny slivers**  
+Enable `builtinGlyphs` in Windows Terminal and run tmux with `-u`.
 
-**Windows: conda errors about home directory** — The Windows config sets `USERPROFILE`/`HOMEDRIVE`/`HOMEPATH`. Re-run `install-windows.sh`.
+**Windows: conda errors about home directory**  
+Re-run `install-windows.sh`.
 
-**Claude Code flicker** — The config includes DEC 2026 Synchronized Output overrides. Make sure your tmux is 3.3a+ for full support. Also set `CLAUDE_CODE_NO_FLICKER=1` in your shell.
+**Claude Code flicker**  
+Make sure tmux is 3.3a+ and keep `CLAUDE_CODE_NO_FLICKER=1` in your shell.
 
-**Slow zsh startup** — See `zshrc` for lazy-load conda pattern. The key fix: `conda.exe shell.zsh hook` already activates base — don't call `conda activate base` again.
+**Slow zsh startup**  
+Use the lazy-load conda pattern in `zshrc`. Do not double-activate `base`.
