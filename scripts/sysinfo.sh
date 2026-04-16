@@ -4,7 +4,8 @@
 
 case "$(uname -s)" in
   Darwin)
-    cpu=$(top -l 1 -n 0 2>/dev/null | awk '/CPU usage/{printf "%.0f", $3}')
+    ncpu=$(sysctl -n hw.ncpu 2>/dev/null || echo 1)
+    cpu=$(ps -A -o %cpu= 2>/dev/null | awk -v n="$ncpu" '{s+=$1} END {v=s/n; if(v>100) printf "100"; else printf "%.0f", v}')
     mem=$(memory_pressure 2>/dev/null | awk '/percentage/{printf "%.0f", $5}')
     ;;
   Linux)
